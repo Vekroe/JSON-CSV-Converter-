@@ -1,0 +1,6 @@
+type,metric,text,placeholder,choices
+number,curlWeight,What is the last weight you curled at the gym? 💪,in pounds,undefined
+choice,gymSentiment,How do you feel about your most recent gym session?,undefined,"[""Bad"",""Average"",""Great""]"
+choice,workoutParticipation,Did you workout today?,undefined,"[""No"",""Yes""]"
+choice,workoutReason,Do you know why your working out?,undefined,"[""No"",""Yes""]"
+segment,workoutMotivation,Have you been motivated to go to the gym lately?,undefined,"[""Nope"",""Some"",""Average"",""Yes"",""Very""]"

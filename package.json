@@ -1,0 +1,24 @@
+{
+  "name": "JSON-CSV-Converter-",
+  "version": "1.0.0",
+  "description": "Read json file in Save csv file out - Read csv file in save json file out - Format the csv file to remove - Add header row to csv that has the name of the attribute",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vekroe/JSON-CSV-Converter-.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Vekroe/JSON-CSV-Converter-/issues"
+  },
+  "homepage": "https://github.com/Vekroe/JSON-CSV-Converter-#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "json-2-csv": "^3.7.6"
+  }
+}
