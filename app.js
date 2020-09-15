@@ -38,8 +38,9 @@ function jsonInput(input) {
     //Import file to variable
     //If I have time I will auto detect names of a file
     var convertFrom = './Input/' + input;
-    var convertTo =  './Output/' + input;
+    var convertTo =  './Output/' + input.slice(0,-3) + '.csv';
     var file = require(convertFrom); //this is a nested JSON array so the array we actually need is stored in todos[questions]
+    console.log(file['questions']);
 
     // convert JSON array to CSV string
     JSONtoCSV.json2csv(file['questions'], (err, csv) => { //converts file[questions] to csv format
@@ -60,7 +61,7 @@ CSV -> JSON
 */
 function csvInput(input) {
     var convertFrom = './Input/' + input;
-    var convertTo =  './Output/' + input;
+    var convertTo =  './Output/' + input.slice(0,-4) + '.js';
     
     CSVToJSON().fromFile(convertFrom)
     .then(file => {
