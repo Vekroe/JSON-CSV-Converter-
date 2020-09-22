@@ -1,5 +1,5 @@
 module.exports = {
-    "title": "users",
+    "title": "The Gym",
     "author": "LifeMetrics",
     "description": "About your gym workouts.",
     "default": false,

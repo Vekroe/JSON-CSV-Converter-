@@ -75,8 +75,20 @@ function csvInput(input) {
     CSVToJSON().fromFile(convertFrom) 
     .then(file => { //file is the new JSON Array
         
+        //adds additional info to the beginning of the array
+        module.exports = {
+            title: input.slice(0, -4), //gets the name of the file and sets it as the title
+            author: "LifeMetrics", //should always be LifeMetrics do not change
+            description: "About your gym workouts.", //need to work on this 
+            default: false, //¯\_(ツ)_/¯
+            public: true, // ¯\_(ツ)_/¯
+            questions: file //adds the csv array into the questions array
+          };
+
+       // module.exports['questions'] = file;
+
         //write JSON to a js file
-        fs.writeFile(convertTo, JSON.stringify(file, null, 4), (err) => {
+        fs.writeFile(convertTo, 'module.exports = ' + JSON.stringify(module.exports, null, 4), (err) => { //need 'module.exports =' as a string in order for the json array to be re-read
             
             if (err) { //error handling
                 throw err; //error handling
