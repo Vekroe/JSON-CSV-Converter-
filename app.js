@@ -85,8 +85,6 @@ function csvInput(input) {
             questions: file //adds the csv array into the questions array
           };
 
-       // module.exports['questions'] = file;
-
         //write JSON to a js file
         fs.writeFile(convertTo, 'module.exports = ' + JSON.stringify(module.exports, null, 4), (err) => { //need 'module.exports =' as a string in order for the json array to be re-read
             
