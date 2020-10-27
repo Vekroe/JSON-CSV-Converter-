@@ -6,6 +6,7 @@ Import needed Libraries
 const JSONtoCSV = require('json-2-csv'); //for json to csv
 const CSVToJSON  = require('csvtojson'); //for csv to json
 const fs = require('fs'); //for file writing 
+const { questions } = require('./Output/users');
 
 /*
 ***************************
@@ -45,17 +46,32 @@ function jsonInput(input) {
     //gets the file contents
     var file = require(convertFrom); //this is a nested JSON array so the array we actually need is stored in file[questions]
 
+    //var edditedfiles = file[]
+
+    var temp = JSON.parse(JSON.stringify(file));
+    delete temp['questions'];
+
+    console.log(temp);
+
+    var remix = JSON.parse('[' + JSON.stringify(temp) + ',' + JSON.stringify(file['questions']).slice(1));
+    console.log(remix);
+
+
+    
+
+
     // convert JSON array to CSV
-    JSONtoCSV.json2csv(file['questions'], (err, csv) => { //converts file[questions] to csv format
+    JSONtoCSV.json2csv(remix, (err, csv) => { //converts file[questions] to csv format
         
-        if (err) { //error handling 
+        if (err) { //error handling
             throw err; //error to console
         }
 
-        // write CSV to a file
+        // write CSV to a files
         fs.writeFileSync(convertTo, csv);
 
     });
+
 
 }
 

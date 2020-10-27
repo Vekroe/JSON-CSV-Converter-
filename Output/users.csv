@@ -1,6 +1,7 @@
-type,metric,text,placeholder,choices
-number,curlWeight,What is the last weight you curled at the gym? 💪,in pounds,undefined
-choice,gymSentiment,How do you feel about your most recent gym session?,,"[""Bad"",""Average"",""Great""]"
-choice,workoutParticipation,Did you workout today?,,"[""No"",""Yes""]"
-choice,workoutReason,Do you know why your working out?,,"[""No"",""Yes""]"
-segment,workoutMotivation,Have you been motivated to go to the gym lately?,,"[""Nope"",""Some"",""Average"",""Yes"",""Very""]"
+title,author,description,default,public,type,metric,text,placeholder,choices
+The Gym,LifeMetrics,About your gym workouts.,false,true,undefined,undefined,undefined,undefined,undefined
+undefined,undefined,undefined,undefined,undefined,number,curlWeight,What is the last weight you curled at the gym? 💪,in pounds,undefined
+undefined,undefined,undefined,undefined,undefined,choice,gymSentiment,How do you feel about your most recent gym session?,,"[""Bad"",""Average"",""Great""]"
+undefined,undefined,undefined,undefined,undefined,choice,workoutParticipation,Did you workout today?,,"[""No"",""Yes""]"
+undefined,undefined,undefined,undefined,undefined,choice,workoutReason,Do you know why your working out?,,"[""No"",""Yes""]"
+undefined,undefined,undefined,undefined,undefined,segment,workoutMotivation,Have you been motivated to go to the gym lately?,,"[""Nope"",""Some"",""Average"",""Yes"",""Very""]"
