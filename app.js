@@ -47,32 +47,27 @@ function jsonInput(input) {
     //gets the file contents
     var file = require(convertFrom); //this is a nested JSON array so the array we actually need is stored in file[questions]
 
-    var wb = Excel.utils.book_new();
+    var wb = Excel.utils.book_new(); //creates a new workbook
+    //sets workbook properties
     wb.Props = {
         Title: file['title'],
         Author: file['author']
     }
 
-    var ws_name = "data";
+    //manages and adds the data sheet
+    var ws_name = "data"; //sets the sheet name to data
+    var ws = Excel.utils.json_to_sheet(file['questions']); //adds the questions data to a new sheet variable
 
-    var ws_data = file['questions'];
-    var ws = Excel.utils.json_to_sheet(ws_data);
+    Excel.utils.book_append_sheet(wb, ws, ws_name); //appends the sheet with the name and data to the selected workbook
 
-    Excel.utils.book_append_sheet(wb, ws, ws_name);
+    //manages and adds the file data sheet 
+    ws_name = "File Info"; //sets new sheet name
+    var fileInfo = JSON.parse(JSON.stringify(file)); //copys the data to a new 
+    delete fileInfo['questions']; //removes question array so that you only have the info section
+    var ws = Excel.utils.json_to_sheet(JSON.parse("[" + JSON.stringify(fileInfo) + "]");); //adds square brackets so that XLSX detects it as a JSON array
 
-    ws_name = "File Info";
-
-    var fileInfo = JSON.parse(JSON.stringify(file));
-    delete fileInfo['questions'];
-
-    ws_data = JSON.parse("[" + JSON.stringify(fileInfo) + "]");
-
-    var ws = Excel.utils.json_to_sheet(ws_data);
-
-    Excel.utils.book_append_sheet(wb, ws, ws_name);
-    Excel.writeFile(wb, convertTo);
-
-
+    Excel.utils.book_append_sheet(wb, ws, ws_name); //appends the sheet with the name and data to the selected workbook
+    Excel.writeFile(wb, convertTo); //writes the workbook to the file
 }
 
 /*
@@ -86,14 +81,12 @@ function csvInput(input) {
     var convertFrom = './Input/' + input; //sets the location of the file
     var convertTo =  './Output/' + input.slice(0,-4) + '.js'; //sets the location to save to
     
-    var workbook = Excel.readFile(convertFrom);
-    var jsonArrayInfo = Excel.utils.sheet_to_json(workbook.Sheets['File Info']);
-    var jsonArrayData = Excel.utils.sheet_to_json(workbook.Sheets['data']);
-    var arrayatempt = jsonArrayInfo;
-    var CompleteArray = JSON.parse((JSON.stringify(arrayatempt).slice(1,-2)) + ',"questions":' +JSON.stringify(jsonArrayData) + '}');
+    var workbook = Excel.readFile(convertFrom); //reads workbook file
+    var jsonArrayInfo = Excel.utils.sheet_to_json(workbook.Sheets['File Info']); //gets file info sheet or module = [] array
+    var jsonArrayData = Excel.utils.sheet_to_json(workbook.Sheets['data']); //gets data sheet or questions[] array
+    var CompleteArray = JSON.parse((JSON.stringify(jsonArrayInfo).slice(1,-2)) + ',"questions":' +JSON.stringify(jsonArrayData) + '}'); //splices together are reformats arrays
 
-    fs.writeFile(convertTo, 'module.exports = ' + JSON.stringify(CompleteArray, null, 4), function(err, result) {
-        if(err) console.log('error', err);
+    fs.writeFile(convertTo, 'module.exports = ' + JSON.stringify(CompleteArray, null, 4), function(err, result) { //last bit of formating while it writes js file
+        if(err) console.log('error', err); //error handling
       });
 }
-
