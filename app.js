@@ -5,7 +5,6 @@ Import needed Libraries
 */
 const Excel = require('xlsx');
 const fs = require('fs'); //for file writing 
-const { questions } = require('./Input/users');
 
 /*
 ***************************
@@ -34,7 +33,7 @@ for (x of files) { //cycle through all files
 
 /*
 ***************************
-Json -> CSV
+Json -> XLSX
 ***************************
 */
 
@@ -64,7 +63,7 @@ function jsonInput(input) {
     ws_name = "File Info"; //sets new sheet name
     var fileInfo = JSON.parse(JSON.stringify(file)); //copys the data to a new 
     delete fileInfo['questions']; //removes question array so that you only have the info section
-    var ws = Excel.utils.json_to_sheet(JSON.parse("[" + JSON.stringify(fileInfo) + "]");); //adds square brackets so that XLSX detects it as a JSON array
+    var ws = Excel.utils.json_to_sheet(JSON.parse("[" + JSON.stringify(fileInfo) + "]")); //adds square brackets so that XLSX detects it as a JSON array
 
     Excel.utils.book_append_sheet(wb, ws, ws_name); //appends the sheet with the name and data to the selected workbook
     Excel.writeFile(wb, convertTo); //writes the workbook to the file
