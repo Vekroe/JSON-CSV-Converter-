@@ -3,10 +3,9 @@
 Import needed Libraries
 ***************************
 */
-const JSONtoCSV = require('json-2-csv'); //for json to csv
-const CSVToJSON  = require('csvtojson'); //for csv to json
+const Excel = require('xlsx');
 const fs = require('fs'); //for file writing 
-const { questions } = require('./Output/users');
+const { questions } = require('./Input/users');
 
 /*
 ***************************
@@ -23,9 +22,11 @@ for (x of files) { //cycle through all files
     if (x.slice(-3) == '.js') { //checks if file is json
         jsonInput(x); //turns json to csv
     }
-    else if (x.slice(-3) == 'csv') { //checks if file is csv
+    
+    else if (x.slice(-5) == '.xlsx') { //checks if file is xlsx
         csvInput(x); //turns csv to json
     }
+    
     else { //if unknown file type 
         console.log(`${x} is not a valid file type`);
     }
@@ -41,75 +42,58 @@ function jsonInput(input) {
 
     //Import file to variable
     var convertFrom = './Input/' + input; //sets the location of the file
-    var convertTo =  './Output/' + input.slice(0,-3) + '.csv'; //sets the location to save to
+    var convertTo =  './Output/' + input.slice(0,-3) + '.xlsx'; //sets the location to save to
 
     //gets the file contents
     var file = require(convertFrom); //this is a nested JSON array so the array we actually need is stored in file[questions]
 
-    //var edditedfiles = file[]
+    var wb = Excel.utils.book_new();
+    wb.Props = {
+        Title: file['title'],
+        Author: file['author']
+    }
 
-    var temp = JSON.parse(JSON.stringify(file));
-    delete temp['questions'];
+    var ws_name = "data";
 
-    console.log(temp);
+    var ws_data = file['questions'];
+    var ws = Excel.utils.json_to_sheet(ws_data);
 
-    var remix = JSON.parse('[' + JSON.stringify(temp) + ',' + JSON.stringify(file['questions']).slice(1));
-    console.log(remix);
+    Excel.utils.book_append_sheet(wb, ws, ws_name);
 
+    ws_name = "File Info";
 
-    
+    var fileInfo = JSON.parse(JSON.stringify(file));
+    delete fileInfo['questions'];
 
+    ws_data = JSON.parse("[" + JSON.stringify(fileInfo) + "]");
 
-    // convert JSON array to CSV
-    JSONtoCSV.json2csv(remix, (err, csv) => { //converts file[questions] to csv format
-        
-        if (err) { //error handling
-            throw err; //error to console
-        }
+    var ws = Excel.utils.json_to_sheet(ws_data);
 
-        // write CSV to a files
-        fs.writeFileSync(convertTo, csv);
-
-    });
+    Excel.utils.book_append_sheet(wb, ws, ws_name);
+    Excel.writeFile(wb, convertTo);
 
 
 }
 
 /*
 ***************************
-CSV -> JSON
+Json -> CSV
 ***************************
 */
-
 function csvInput(input) {
 
     //Import file to variable
     var convertFrom = './Input/' + input; //sets the location of the file
     var convertTo =  './Output/' + input.slice(0,-4) + '.js'; //sets the location to save to
     
-    //convert CSV to JSON array
-    CSVToJSON().fromFile(convertFrom) 
-    .then(file => { //file is the new JSON Array
-        
-        //adds additional info to the beginning of the array
-        module.exports = {
-            title: input.slice(0, -4), //gets the name of the file and sets it as the title
-            author: "LifeMetrics", //should always be LifeMetrics do not change
-            description: "About your gym workouts.", //need to work on this 
-            default: false, //¯\_(ツ)_/¯
-            public: true, // ¯\_(ツ)_/¯
-            questions: file //adds the csv array into the questions array
-          };
+    var workbook = Excel.readFile(convertFrom);
+    var jsonArrayInfo = Excel.utils.sheet_to_json(workbook.Sheets['File Info']);
+    var jsonArrayData = Excel.utils.sheet_to_json(workbook.Sheets['data']);
+    var arrayatempt = jsonArrayInfo;
+    var CompleteArray = JSON.parse((JSON.stringify(arrayatempt).slice(1,-2)) + ',"questions":' +JSON.stringify(jsonArrayData) + '}');
 
-        //write JSON to a js file
-        fs.writeFile(convertTo, 'module.exports = ' + JSON.stringify(module.exports, null, 4), (err) => { //need 'module.exports =' as a string in order for the json array to be re-read
-            
-            if (err) { //error handling
-                throw err; //error handling
-            }
-        });
-
-    }).catch(err => { //error handling
-        console.log(err); //error handling
-    });
+    fs.writeFile(convertTo, 'module.exports = ' + JSON.stringify(CompleteArray, null, 4), function(err, result) {
+        if(err) console.log('error', err);
+      });
 }
+
